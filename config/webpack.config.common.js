@@ -115,10 +115,6 @@ const webpackConfig = {
 						'cyrillic'
 					]
 				},
-				{
-					family: 'Press Start 2P',
-					variants: ["400"]
-				},
 				
 				// {family: "Pixelar", variants: ['500']}
 			],

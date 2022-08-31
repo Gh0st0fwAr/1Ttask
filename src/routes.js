@@ -1,8 +1,8 @@
 
 import Home from '@/components/Home.vue'
 import mainPage from '@/components/mainPage.vue'
-import Login from '@/components/Login.vue'
-import Reg from '@/components/Reg.vue'
+import form from '@/components/form.vue'
+import post from '@/components/post.vue'
 
 const routes = [
    {
@@ -11,21 +11,21 @@ const routes = [
       component: Home,
       children: [
          {
-            path: '/main',
+            path: '/',
             name: 'Main',
             component: mainPage
          },
+         {
+            path: '/form',
+            name: 'Form',
+            component: form
+         },
+         {
+            path: '/posts/*',
+            name: 'Post',
+            component: post
+         }
       ],
-   },
-   {      
-      path: '/login',
-      name: 'Login',
-      component: Login
-   },
-   {      
-      path: '/reg',
-      name: 'Reg',
-      component: Reg 
    },
    
 

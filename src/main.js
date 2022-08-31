@@ -12,10 +12,12 @@ import axios from 'axios'
 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+
+// import { fas } from '@fortawesome/free-'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(fab)
+library.add(faArrowDown)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
@@ -26,7 +28,7 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     routes,
     linkActiveClass: 'active',
-    mode: 'history',
+    // mode: 'history',
     base: "/"
 });
 

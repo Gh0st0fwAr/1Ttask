@@ -1,7 +1,8 @@
 <template>
-   <div class="main">
+   <div class="subwrapper">
       <menuApp></menuApp>
-      <router-view></router-view>
+      <router-view @new-post="processPost"
+                   :customPosts="customPosts"></router-view>
    </div>
 </template>
 
@@ -9,6 +10,12 @@
 export default {
    data() {
       return {
+         customPosts: []
+      }
+   },
+   methods: {
+      processPost(post) {
+         this.customPosts.push(post);
       }
    },
    components: {

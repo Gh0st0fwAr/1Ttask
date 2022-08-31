@@ -1,69 +1,96 @@
 <template>
    <div class="overview">
-      <div class="overview__mask"></div>
-      <div class="overview__content">
-         <div class="overview__video">
-            <div class="overview__videobox overview--box">Video</div>
-         </div>
-         <div class="overview__about">
-            <div class="overview__data overview--box">About</div>
-            <div class="overview__slider overview--box">Slider</div>
-         </div>
-         <div class="overview__info">
-            <div class="info__socials">
-               <a class="info__link">
-                  <font-awesome-icon class="info__icon" :icon="['fab', 'vk']"></font-awesome-icon>
-               </a>
-               <a class="info__link">
-                  <font-awesome-icon class="info__icon" :icon="['fab', 'twitter-square']"></font-awesome-icon>
-               </a>
-               <a class="info__link">
-                  <font-awesome-icon class="info__icon" :icon="['fab', 'instagram']"></font-awesome-icon>
-               </a>
-               <a class="info__link">
-                  <font-awesome-icon class="info__icon" :icon="['fab', 'facebook-square']"></font-awesome-icon>
-               </a>
-            </div>
-            <div class="info__team">
-               <div class="team__member">
-                  <div class="team__contacts">
-                     <div class="team__number">+7 985 336 80 01</div>
-                     <div class="team__mail">neko1606@gmail.com</div>
-                  </div>
-                  <div class="team__name">Shevschenko Valeria</div>
-                  <div class="team__pos">Frontend Lead</div>
-               </div>
-
-               <div class="team__member">
-                  <div class="team__contacts">
-                     <div class="team__number">+7 912 585 52 55</div>
-                     <div class="team__mail">nkonshin@me.com</div>
-                  </div>
-                  <div class="team__name">Konshin Nikita</div>
-                  <div class="team__pos">Frontend</div>
-               </div>
-
-               <div class="team__member">
-                  <div class="team__contacts">
-                     <div class="team__number">+7 985 688 10 30</div>
-                     <div class="team__mail">zorza2011@mail.ru</div>
-                  </div>
-                  <div class="team__name">Aganova Alena</div>
-                  <div class="team__pos">JavaGod</div>
-               </div>
-            </div>
-            <div class="info__copyright">© 2020 Moscow, BMSTU, IU6-52B</div>
-         </div>
+      <div @click="processSort" class="overview__sort">
+         <font-awesome-icon :class="{'overview__arrow--active' : sortDirection}" class="overview__arrow" :icon="'arrow-down'">            
+         </font-awesome-icon>
+         <div class="overview__icon">AZ</div>
+      </div>
+      <div class="overview__filterwrapper">
+         <label class="overview__label">
+            <input v-model="filter" type="text" name="" id="" class="overview__filter">
+            <div class="overview__title">Filter</div>
+         </label>
+      </div>
+      <div class="overview__news">
+         <router-link :tag="'div'" :to="'/posts/' + card.id" v-for="card in filteredCards" class="overview__link">
+            <card :userId="card.userId" :title="card.title"></card>
+         </router-link>
       </div>
    </div>
 </template>
 
 <script>
+
+import usernames from '../utils/usernames.json';
+
 export default {
    data() {
       return {
-
+         cards: [],
+         filteredCards: [],
+         sortDirection: true,
+         filter: '',
+         usernames
       }
+   },
+   props: {
+      customPosts: Array
+   },
+   components: {
+      card: () => import('./card.vue')
+   },
+   watch: {
+      filter: {
+         immediate: false,
+         handler: function() {
+            this.filteredCards = this.cards.filter(card => {
+               console.log(card.userId.toString().indexOf(this.filter))
+               return card.userId.toString().indexOf(this.filter) !== -1
+            })
+         }
+      }
+   },
+   methods: {
+      processSort() {
+         this.sortDirection = !this.sortDirection;
+         this.sortPosts();
+      },
+      sortPosts() {
+            if (this.sortDirection) {
+               this.filteredCards.sort(function(a, b) {
+                  if (a['title'] > b['title']) {return -1;}
+                  if (a['title'] < b['title']) {return 1;}
+                  return 0
+               })
+            } else {
+               this.filteredCards.sort(function(a, b) {
+                  if (a['title'] < b['title']) {return -1;}
+                  if (a['title'] > b['title']) {return 1;}
+                  return 0
+               })
+            }
+         },
+      getPosts() {
+         this.axios.get('https://jsonplaceholder.typicode.com/posts').then(r => {
+            console.log(r);
+            this.processUsernames(r.data)
+            
+         })
+      },
+      processUsernames(data) {
+         let cards = data;
+         cards.forEach(card => {
+            card.userId = this.usernames[card.userId]
+         })
+         this.customPosts.forEach(post => {
+            cards.unshift(post);
+         })
+         this.cards = cards;
+         this.filteredCards = cards;
+      }
+   },
+   created() {
+      this.getPosts();
    }
 }
 </script>

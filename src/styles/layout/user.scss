@@ -1,0 +1,28 @@
+
+.user {
+   display: flex;
+   height: fit-content;
+   min-width: 435px;
+   // padding: 17px 46px;
+}
+
+.user__block {
+   display: flex;
+   flex-direction: column;   
+   justify-content: space-around;
+   margin-left: 18px;
+}
+
+.user__name {
+   font-size: 12px;
+   // margin-bottom: 0px;
+}
+
+.user__email {
+   font-size: 12px;
+   // margin-bottom: 6px;
+}
+
+.user__title {
+   font-size: 15px;
+}
