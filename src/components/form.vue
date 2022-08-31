@@ -41,6 +41,7 @@ export default {
          }
          this.axios.post('https://jsonplaceholder.typicode.com/posts', formData).then(r => {
             this.$emit('new-post', r.data)
+            this.name = this.title = this.body = '';
          })
       }
    }
